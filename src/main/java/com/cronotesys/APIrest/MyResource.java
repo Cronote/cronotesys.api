@@ -55,6 +55,7 @@ public class MyResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public LoginVO addLogin(LoginVO loginVO) {
+		System.out.println(loginVO.getEmail());
 	  	return new LoginDAO().saveOrUpdate(loginVO);
 	}
    
@@ -62,7 +63,6 @@ public class MyResource {
     @Path("email_exists")
     @Produces(MediaType.APPLICATION_JSON)
     public LoginVO emailExists(@QueryParam("email")String sEmail) {
-		System.out.println(sEmail);
 		return new LoginDAO().loginExists(sEmail);
     }
 }
