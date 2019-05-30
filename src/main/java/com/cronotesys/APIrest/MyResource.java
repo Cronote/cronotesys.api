@@ -81,7 +81,7 @@ public class MyResource {
 	@GET
 	@Path("email_exists")
 	@Produces(MediaType.APPLICATION_JSON)
-	public LoginVO emailExists(@QueryParam("email") String sEmail) {
+	public Long emailExists(@QueryParam("email") String sEmail) {
 		return new LoginDAO().loginExists(sEmail);
 	}
 	
