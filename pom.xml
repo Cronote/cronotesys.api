@@ -34,7 +34,7 @@
 		<dependency>
 			<groupId>com.github.Cronote</groupId>
 			<artifactId>cronotesys.model</artifactId>
-			<version>449a9e6cad</version>
+			<version>2be05e1a38</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
