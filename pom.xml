@@ -29,15 +29,12 @@
 	</dependencyManagement>
 
 	<dependencies>
-		<!-- retirar para usar local <dependency>
-			<groupId>com</groupId>
-			<artifactId>Cronotesys.model</artifactId>
-			<version>0.0.1</version>
-		</dependency> -->
+		<!-- retirar para usar local<dependency> <groupId>com</groupId> <artifactId>Cronotesys.model</artifactId> 
+			<version>0.0.1</version> </dependency> -->
 		<dependency>
 			<groupId>com.github.Cronote</groupId>
 			<artifactId>cronotesys.model</artifactId>
-			<version>ad0463b556</version>
+			<version>449a9e6cad</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>

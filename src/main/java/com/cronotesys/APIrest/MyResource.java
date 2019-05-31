@@ -12,6 +12,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.cronoteSys.filter.ActivityFilter;
+import com.cronoteSys.filter.TestFilter;
 import com.cronoteSys.model.dao.ActivityDAO;
 import com.cronoteSys.model.dao.CategoryDAO;
 import com.cronoteSys.model.dao.ExecutionTimeDAO;
@@ -41,7 +42,6 @@ public class MyResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getIt() {
 //    	ActivityVO atc = new ActivityDAO().find(1);
-		System.out.println("Aaaaa");
 		return "Hello, Heroku!" /* + atc.getTitle() */;
 	}
 
@@ -49,7 +49,6 @@ public class MyResource {
 	@Path("connection")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String connection() {
-		System.out.println("success");
 		return "SUCCESS";
 	}
 
@@ -66,7 +65,6 @@ public class MyResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public LoginVO addLogin(LoginVO loginVO) {
-		System.out.println(loginVO.getEmail());
 		return new LoginDAO().saveOrUpdate(loginVO);
 	}
 
@@ -84,7 +82,8 @@ public class MyResource {
 	public Long emailExists(@QueryParam("email") String sEmail) {
 		return new LoginDAO().loginExists(sEmail);
 	}
-	
+
+
 	@POST
 	@Path("saveActivity")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -92,24 +91,26 @@ public class MyResource {
 	public ActivityVO saveActivity(ActivityVO activityVO) {
 		return new ActivityDAO().saveOrUpdate(activityVO);
 	}
-	 
-	@DELETE	
+
+	@DELETE
 	@Path("deleteActivity")
 	@Produces(MediaType.APPLICATION_JSON)
-	public boolean deleteActivity(@QueryParam("id")int id) {
+	public boolean deleteActivity(@QueryParam("id") int id) {
 		ActivityDAO acDao = new ActivityDAO();
 		acDao.delete(id);
 		return true;
 	}
-	
+
 	@GET
 	@Path("getActivityList")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public List<ActivityVO> listByActivity(@QueryParam("filter") ActivityFilter filter){
-        return new ActivityDAO().getFiltredList(filter);
-    }
-	
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public List<ActivityVO> listByActivity(@QueryParam("filter") ActivityFilter filter) {
+		List<ActivityVO> lst = new ActivityDAO().getFiltredList(filter);
+		
+		return lst;
+	}
+
 	@POST
 	@Path("saveProject")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -117,22 +118,22 @@ public class MyResource {
 	public ProjectVO saveProject(ProjectVO projectVO) {
 		return new ProjectDAO().saveOrUpdate(projectVO);
 	}
-	
+
 	@DELETE
 	@Path("deleteProject")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void deleteProject(int id) {
 		new ProjectDAO().delete(id);
 	}
-	
+
 	@GET
 	@Path("getListProjectByUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public List<ProjectVO> listProjectByActivity(@QueryParam("user") UserVO user){
-		return new ProjectDAO().getList(user);
+	public List<ProjectVO> listProjectByActivity(@QueryParam("userid") int userId) {
+		return new ProjectDAO().getList(userId);
 	}
-	
+
 	@POST
 	@Path("saveCategory")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -140,7 +141,7 @@ public class MyResource {
 	public CategoryVO saveCategory(CategoryVO categoryVO) {
 		return new CategoryDAO().saveOrUpdate(categoryVO);
 	}
-	
+
 	@DELETE
 	@Path("deleteCategory")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -151,18 +152,23 @@ public class MyResource {
 	@GET
 	@Path("countByCategory")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public int countByCategory(CategoryVO categoryVO) {
-		return new ActivityDAO().countByCategory(categoryVO);
+	public int countByCategory(@QueryParam("categoryID") int categoryId) {
+		return new ActivityDAO().countByCategory(categoryId);
 	}
-	
+
 	@GET
 	@Path("listAllCategory")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<CategoryVO> listAllCategory(){
+	public List<CategoryVO> listAllCategory() {
 		return new CategoryDAO().getList();
 	}
-	
+	@GET
+	@Path("listCategoryByUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<CategoryVO> listAllCategory(@QueryParam("userID") int userId) {
+		return new CategoryDAO().getList(userId);
+	}
+
 	@POST
 	@Path("saveExecutionTime")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -175,15 +181,15 @@ public class MyResource {
 	@Path("executionInProgress")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ExecutionTimeVO executionInProgress(ActivityVO activityVO) {
-		return new ExecutionTimeDAO().executionInProgress(activityVO);
+	public ExecutionTimeVO executionInProgress(@QueryParam("activityID")int activityID) {
+		return new ExecutionTimeDAO().executionInProgress(activityID);
 	}
-	
+
 	@GET
 	@Path("listExecutionTimeByActivity")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public List<ExecutionTimeVO> listExecutionTimeByActivity(@QueryParam("activity")ActivityVO activityVO){
-		return new ExecutionTimeDAO().listByActivity(activityVO);
+	public List<ExecutionTimeVO> listExecutionTimeByActivity(@QueryParam("activityID") int activityID) {
+		return new ExecutionTimeDAO().listByActivity(activityID);
 	}
 }
