@@ -191,4 +191,13 @@ public class MyResource {
 	public List<ExecutionTimeVO> listExecutionTimeByActivity(@QueryParam("activityID") int activityID) {
 		return new ExecutionTimeDAO().listByActivity(activityID);
 	}
+	
+	@POST
+	@Path("passwordChange")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public int passwordChange(String infos) {
+		String[] infosA = infos.split(";");
+		return new LoginDAO().changePassword(infosA[0], infosA[1]);
+	}
 }
