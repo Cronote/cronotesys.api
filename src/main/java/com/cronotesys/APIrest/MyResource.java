@@ -17,12 +17,14 @@ import com.cronoteSys.model.dao.CategoryDAO;
 import com.cronoteSys.model.dao.ExecutionTimeDAO;
 import com.cronoteSys.model.dao.LoginDAO;
 import com.cronoteSys.model.dao.ProjectDAO;
+import com.cronoteSys.model.dao.TeamDAO;
 import com.cronoteSys.model.dao.UserDAO;
 import com.cronoteSys.model.vo.ActivityVO;
 import com.cronoteSys.model.vo.CategoryVO;
 import com.cronoteSys.model.vo.ExecutionTimeVO;
 import com.cronoteSys.model.vo.LoginVO;
 import com.cronoteSys.model.vo.ProjectVO;
+import com.cronoteSys.model.vo.TeamVO;
 import com.cronoteSys.model.vo.UserVO;
 
 /**
@@ -139,6 +141,21 @@ public class MyResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public CategoryVO saveCategory(CategoryVO categoryVO) {
 		return new CategoryDAO().saveOrUpdate(categoryVO);
+	}
+	@POST
+	@Path("saveTeam")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public TeamVO saveTeam(TeamVO teamVO) {
+		System.out.println(teamVO.getName());
+		return new TeamDAO().saveOrUpdate(teamVO);
+	}
+	@GET
+	@Path("getListTeamsByUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public List<TeamVO> listTeamByUser(@QueryParam("userid") int userId) {
+		return new TeamDAO().getList(userId);
 	}
 
 	@DELETE
