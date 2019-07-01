@@ -84,7 +84,6 @@ public class MyResource {
 		return new LoginDAO().loginExists(sEmail);
 	}
 
-
 	@POST
 	@Path("saveActivity")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -108,7 +107,7 @@ public class MyResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public List<ActivityVO> listByActivity(@QueryParam("filter") ActivityFilter filter) {
 		List<ActivityVO> lst = new ActivityDAO().getFiltredList(filter);
-		
+
 		return lst;
 	}
 
@@ -142,20 +141,21 @@ public class MyResource {
 	public CategoryVO saveCategory(CategoryVO categoryVO) {
 		return new CategoryDAO().saveOrUpdate(categoryVO);
 	}
+
 	@POST
 	@Path("saveTeam")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public TeamVO saveTeam(TeamVO teamVO) {
-		System.out.println(teamVO.getName());
 		return new TeamDAO().saveOrUpdate(teamVO);
 	}
+
 	@GET
 	@Path("getListTeamsByUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public List<TeamVO> listTeamByUser(@QueryParam("userid") int userId) {
-		return new TeamDAO().getList(userId);
+	public List<TeamVO> listTeamByUser(@QueryParam("userId") int userId) {
+		return new TeamDAO().listByUserOwnerOrMember(userId);
 	}
 
 	@DELETE
@@ -178,6 +178,7 @@ public class MyResource {
 	public List<CategoryVO> listAllCategory() {
 		return new CategoryDAO().getList();
 	}
+
 	@GET
 	@Path("listCategoryByUser")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -192,12 +193,12 @@ public class MyResource {
 	public ExecutionTimeVO saveExecutionTime(ExecutionTimeVO executionTimeVO) {
 		return new ExecutionTimeDAO().saveOrUpdate(executionTimeVO);
 	}
-	
+
 	@GET
 	@Path("executionInProgress")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ExecutionTimeVO executionInProgress(@QueryParam("activityID")int activityID) {
+	public ExecutionTimeVO executionInProgress(@QueryParam("activityID") int activityID) {
 		return new ExecutionTimeDAO().executionInProgress(activityID);
 	}
 
@@ -208,7 +209,7 @@ public class MyResource {
 	public List<ExecutionTimeVO> listExecutionTimeByActivity(@QueryParam("activityID") int activityID) {
 		return new ExecutionTimeDAO().listByActivity(activityID);
 	}
-	
+
 	@POST
 	@Path("passwordChange")
 	@Consumes(MediaType.APPLICATION_JSON)
