@@ -217,4 +217,9 @@ public class MyResource {
 		String[] infosA = infos.split(";");
 		return new LoginDAO().changePassword(infosA[0], infosA[1]);
 	}
+	
+	@GET
+	@Path("sendEmail")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 }
