@@ -11,7 +11,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.mail.Email;
+
 import com.cronoteSys.filter.ActivityFilter;
+import com.cronoteSys.model.bo.EmailBO;
 import com.cronoteSys.model.dao.ActivityDAO;
 import com.cronoteSys.model.dao.CategoryDAO;
 import com.cronoteSys.model.dao.ExecutionTimeDAO;
@@ -21,6 +24,7 @@ import com.cronoteSys.model.dao.TeamDAO;
 import com.cronoteSys.model.dao.UserDAO;
 import com.cronoteSys.model.vo.ActivityVO;
 import com.cronoteSys.model.vo.CategoryVO;
+import com.cronoteSys.model.vo.EmailVO;
 import com.cronoteSys.model.vo.ExecutionTimeVO;
 import com.cronoteSys.model.vo.LoginVO;
 import com.cronoteSys.model.vo.ProjectVO;
@@ -220,7 +224,10 @@ public class MyResource {
 	}
 	
 	@GET
-	@Path("sendEmail")
+	@Path("genericEmail")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
+	public boolean genericEmail(@QueryParam("email") EmailVO email) {
+		return new EmailBO().genericEmail(email);
+	}
 }
