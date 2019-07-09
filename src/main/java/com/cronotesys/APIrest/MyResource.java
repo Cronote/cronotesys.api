@@ -30,6 +30,7 @@ import com.cronoteSys.model.vo.LoginVO;
 import com.cronoteSys.model.vo.ProjectVO;
 import com.cronoteSys.model.vo.TeamVO;
 import com.cronoteSys.model.vo.UserVO;
+import com.cronoteSys.model.vo.view.SimpleUser;
 
 /**
  * Root resource (exposed at "myresource" path)
@@ -154,12 +155,39 @@ public class MyResource {
 		return new TeamDAO().saveOrUpdate(teamVO);
 	}
 
+	@DELETE
+	@Path("deleteTeam")
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean deleteTeam(@QueryParam("id") long id) {
+
+		new TeamDAO().delete(id);
+		return true;
+	}
+
 	@GET
 	@Path("getListTeamsByUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public List<TeamVO> listTeamByUser(@QueryParam("userId") int userId) {
 		return new TeamDAO().listByUserOwnerOrMember(userId);
+	}
+
+	@GET
+	@Path("listAllTeam")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public List<TeamVO> listAllTeam() {
+		return new TeamDAO().listAll();
+	}
+
+	@GET
+	@Path("listByNameOrEmail")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public List<SimpleUser> listSimpleUserByNameOrEmail(@QueryParam("search") String search,
+			@QueryParam("not") String filter) {
+
+		return new UserDAO().findByNameOrEmail(search, filter);
 	}
 
 	@DELETE
@@ -222,12 +250,16 @@ public class MyResource {
 		String[] infosA = infos.split(";");
 		return new LoginDAO().changePassword(infosA[0], infosA[1]);
 	}
-	
-	@GET
-	@Path("genericEmail")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public boolean genericEmail(@QueryParam("email") EmailVO email) {
-		return new EmailBO().genericEmail(email);
-	}
+//
+//	@GET
+//	@Path("genericEmail")
+//	@Consumes(MediaType.APPLICATION_JSON)
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public int genericEmail(@QueryParam("email") EmailVO email) {
+//		boolean b = new EmailBO().genericEmail(email);
+//		if (b)
+//			return 1;
+//		else
+//			return 0;
+//	}
 }
