@@ -127,7 +127,7 @@ public class MyResource {
 	@DELETE
 	@Path("deleteProject")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void deleteProject(int id) {
+	public void deleteProject(@QueryParam("id") int id) {
 		new ProjectDAO().delete(id);
 	}
 
