@@ -11,10 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.commons.mail.Email;
-
 import com.cronoteSys.filter.ActivityFilter;
-import com.cronoteSys.model.bo.EmailBO;
 import com.cronoteSys.model.dao.ActivityDAO;
 import com.cronoteSys.model.dao.CategoryDAO;
 import com.cronoteSys.model.dao.ExecutionTimeDAO;
@@ -24,13 +21,14 @@ import com.cronoteSys.model.dao.TeamDAO;
 import com.cronoteSys.model.dao.UserDAO;
 import com.cronoteSys.model.vo.ActivityVO;
 import com.cronoteSys.model.vo.CategoryVO;
-import com.cronoteSys.model.vo.EmailVO;
 import com.cronoteSys.model.vo.ExecutionTimeVO;
 import com.cronoteSys.model.vo.LoginVO;
 import com.cronoteSys.model.vo.ProjectVO;
 import com.cronoteSys.model.vo.TeamVO;
 import com.cronoteSys.model.vo.UserVO;
 import com.cronoteSys.model.vo.view.SimpleUser;
+import com.cronoteSys.util.GsonUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
  * Root resource (exposed at "myresource" path)
@@ -62,24 +60,28 @@ public class MyResource {
 	@Path("login")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public UserVO validade(LoginVO loginVO) {
-		return new LoginDAO().verifiedUser(loginVO.getEmail(), loginVO.getPasswd());
+	public String validade(LoginVO loginVO) {
+		UserVO user = new LoginDAO().verifiedUser(loginVO.getEmail(), loginVO.getPasswd());
+		return GsonUtil.getGsonWithJavaTime().toJson(user);
 	}
 
 	@POST
 	@Path("saveLogin")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public LoginVO addLogin(LoginVO loginVO) {
-		return new LoginDAO().saveOrUpdate(loginVO);
+	public String addLogin(LoginVO loginVO) {
+		LoginVO login = new LoginDAO().saveOrUpdate(loginVO);
+		return GsonUtil.getGsonWithJavaTime().toJson(login);
+
 	}
 
 	@POST
 	@Path("saveUser")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public UserVO addUser(UserVO userVO) {
-		return new UserDAO().saveOrUpdate(userVO);
+	public String addUser(UserVO userVO) {
+		UserVO user = new UserDAO().saveOrUpdate(userVO);
+		return GsonUtil.getGsonWithJavaTime().toJson(user);
 	}
 
 	@GET
@@ -93,8 +95,9 @@ public class MyResource {
 	@Path("saveActivity")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ActivityVO saveActivity(ActivityVO activityVO) {
-		return new ActivityDAO().saveOrUpdate(activityVO);
+	public String saveActivity(ActivityVO activityVO) {
+		ActivityVO act = new ActivityDAO().saveOrUpdate(activityVO);
+		return GsonUtil.getGsonWithJavaTime().toJson(act);
 	}
 
 	@DELETE
@@ -110,23 +113,23 @@ public class MyResource {
 	@Path("getActivityList")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public List<ActivityVO> listByActivity(@QueryParam("filter") ActivityFilter filter) {
+	public String listByActivity(@QueryParam("filter") ActivityFilter filter) {
 		List<ActivityVO> lst = new ActivityDAO().getFiltredList(filter);
-
-		return lst;
+		String json = GsonUtil.getGsonWithJavaTime().toJson(lst);
+		return json;
 	}
 
 	@POST
 	@Path("saveProject")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ProjectVO saveProject(ProjectVO projectVO) {
-		return new ProjectDAO().saveOrUpdate(projectVO);
+	public String saveProject(ProjectVO projectVO) {
+		ProjectVO project = new ProjectDAO().saveOrUpdate(projectVO);
+		return GsonUtil.getGsonWithJavaTime().toJson(project);
 	}
 
 	@DELETE
 	@Path("deleteProject")
-	@Produces(MediaType.APPLICATION_JSON)
 	public void deleteProject(@QueryParam("id") int id) {
 		new ProjectDAO().delete(id);
 	}
@@ -135,31 +138,36 @@ public class MyResource {
 	@Path("getListProjectByUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public List<ProjectVO> listProjectByActivity(@QueryParam("userid") int userId) {
-		return new ProjectDAO().getList(userId);
+	public String listProjectByActivity(@QueryParam("userid") int userId) {
+		List<ProjectVO> lst = new ProjectDAO().getList(userId);
+		String json = GsonUtil.getGsonWithJavaTime().toJson(lst);
+		return json;
 	}
 
 	@POST
 	@Path("saveCategory")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public CategoryVO saveCategory(CategoryVO categoryVO) {
-		return new CategoryDAO().saveOrUpdate(categoryVO);
+	public String saveCategory(CategoryVO categoryVO) {
+		CategoryVO cat = new CategoryDAO().saveOrUpdate(categoryVO);
+		String json = GsonUtil.getGsonWithJavaTime().toJson(cat);
+		return json;
 	}
 
 	@POST
 	@Path("saveTeam")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public TeamVO saveTeam(TeamVO teamVO) {
-		return new TeamDAO().saveOrUpdate(teamVO);
+	public String saveTeam(TeamVO teamVO) {
+		TeamVO team = new TeamDAO().saveOrUpdate(teamVO);
+		String json = GsonUtil.getGsonWithJavaTime().toJson(team);
+		return json;
 	}
 
 	@DELETE
 	@Path("deleteTeam")
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean deleteTeam(@QueryParam("id") long id) {
-
 		new TeamDAO().delete(id);
 		return true;
 	}
@@ -168,78 +176,101 @@ public class MyResource {
 	@Path("getListTeamsByUser")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public List<TeamVO> listTeamByUser(@QueryParam("userId") int userId) {
-		return new TeamDAO().listByUserOwnerOrMember(userId);
+	public String listTeamByUser(@QueryParam("userId") int userId) throws JsonProcessingException {
+		List<TeamVO> lst = new TeamDAO().listByUserOwnerOrMember(userId);
+		String json = GsonUtil.getGsonWithJavaTime().toJson(lst);
+		return json;
+	}
+
+	@GET
+	@Path("test")
+	public String testUser() {
+		List<UserVO> lst = new UserDAO().listAll();
+		return GsonUtil.getGsonWithJavaTime().toJson(lst.get(2));
+
 	}
 
 	@GET
 	@Path("listAllTeam")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public List<TeamVO> listAllTeam() {
-		return new TeamDAO().listAll();
+	public String listAllTeam() {
+		List<TeamVO> lst = new TeamDAO().listAll();
+		String json = GsonUtil.getGsonWithJavaTime().toJson(lst);
+		return json;
 	}
 
 	@GET
 	@Path("listByNameOrEmail")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public List<SimpleUser> listSimpleUserByNameOrEmail(@QueryParam("search") String search,
-			@QueryParam("not") String filter) {
+	public String listSimpleUserByNameOrEmail(@QueryParam("search") String search, @QueryParam("not") String filter) {
 
-		return new UserDAO().findByNameOrEmail(search, filter);
+		List<SimpleUser> lst = new UserDAO().findByNameOrEmail(search, filter);
+		String json = GsonUtil.getGsonWithJavaTime().toJson(lst);
+		return json;
 	}
 
 	@DELETE
 	@Path("deleteCategory")
-	@Produces(MediaType.APPLICATION_JSON)
 	public void deleteCategory(int id) {
 		new CategoryDAO().delete(id);
 	}
 
 	@GET
 	@Path("countByCategory")
-	@Produces(MediaType.APPLICATION_JSON)
-	public int countByCategory(@QueryParam("categoryID") int categoryId) {
-		return new ActivityDAO().countByCategory(categoryId);
+	public String countByCategory(@QueryParam("categoryID") int categoryId) {
+		return GsonUtil.getGsonWithJavaTime().toJson(new UserDAO().find(3));
+//		return new ActivityDAO().countByCategory(categoryId);
 	}
 
 	@GET
 	@Path("listAllCategory")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<CategoryVO> listAllCategory() {
-		return new CategoryDAO().getList();
+	public String listAllCategory() {
+		List<CategoryVO> lst = new CategoryDAO().getList();
+		String json = GsonUtil.getGsonWithJavaTime().toJson(lst);
+		return json;
 	}
 
 	@GET
 	@Path("listCategoryByUser")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<CategoryVO> listAllCategory(@QueryParam("userID") int userId) {
-		return new CategoryDAO().getList(userId);
+	public String listAllCategory(@QueryParam("userID") int userId) {
+		List<CategoryVO> lst = new CategoryDAO().getList(userId);
+		String json = GsonUtil.getGsonWithJavaTime().toJson(lst);
+		return json;
+
 	}
 
 	@POST
 	@Path("saveExecutionTime")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ExecutionTimeVO saveExecutionTime(ExecutionTimeVO executionTimeVO) {
-		return new ExecutionTimeDAO().saveOrUpdate(executionTimeVO);
+	public String saveExecutionTime(ExecutionTimeVO executionTimeVO) {
+		ExecutionTimeVO exec = new ExecutionTimeDAO().saveOrUpdate(executionTimeVO);
+		String json = GsonUtil.getGsonWithJavaTime().toJson(exec);
+		return json;
 	}
 
 	@GET
 	@Path("executionInProgress")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public ExecutionTimeVO executionInProgress(@QueryParam("activityID") int activityID) {
-		return new ExecutionTimeDAO().executionInProgress(activityID);
+	public String executionInProgress(@QueryParam("activityID") int activityID) {
+		ExecutionTimeVO exec = new ExecutionTimeDAO().executionInProgress(activityID);
+		String json = GsonUtil.getGsonWithJavaTime().toJson(exec);
+		return json;
 	}
 
 	@GET
 	@Path("listExecutionTimeByActivity")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public List<ExecutionTimeVO> listExecutionTimeByActivity(@QueryParam("activityID") int activityID) {
-		return new ExecutionTimeDAO().listByActivity(activityID);
+	public String listExecutionTimeByActivity(@QueryParam("activityID") int activityID) {
+		List<ExecutionTimeVO> lst = new ExecutionTimeDAO().listByActivity(activityID);
+		String json = GsonUtil.getGsonWithJavaTime().toJson(lst);
+		return json;
 	}
 
 	@POST
@@ -250,16 +281,4 @@ public class MyResource {
 		String[] infosA = infos.split(";");
 		return new LoginDAO().changePassword(infosA[0], infosA[1]);
 	}
-//
-//	@GET
-//	@Path("genericEmail")
-//	@Consumes(MediaType.APPLICATION_JSON)
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public int genericEmail(@QueryParam("email") EmailVO email) {
-//		boolean b = new EmailBO().genericEmail(email);
-//		if (b)
-//			return 1;
-//		else
-//			return 0;
-//	}
 }
