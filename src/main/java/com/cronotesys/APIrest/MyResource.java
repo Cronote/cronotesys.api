@@ -206,7 +206,7 @@ public class MyResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String listSimpleUserByNameOrEmail(@QueryParam("search") String search, @QueryParam("not") String filter) {
 
-		List<SimpleUser> lst = new UserDAO().findByNameOrEmail(search, filter);
+		List<UserVO> lst = new UserDAO().findByNameOrEmail(search, filter);
 		String json = GsonUtil.getGsonWithJavaTime().toJson(lst);
 		return json;
 	}
@@ -280,5 +280,12 @@ public class MyResource {
 	public int passwordChange(String infos) {
 		String[] infosA = infos.split(";");
 		return new LoginDAO().changePassword(infosA[0], infosA[1]);
+	}
+	
+	@GET
+	@Path("countProjectByTeam")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Integer countProjectByTeam(@QueryParam("teamId") long teamId) {
+		return new ProjectDAO().countByTeam(teamId);
 	}
 }
