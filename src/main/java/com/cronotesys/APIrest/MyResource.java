@@ -210,6 +210,16 @@ public class MyResource {
 		String json = GsonUtil.getGsonWithJavaTime().toJson(lst);
 		return json;
 	}
+	@GET
+	@Path("listLoggedUsers")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String listLoggedUsers(@QueryParam("idsIn") String idsIn, @QueryParam("not") String idsOut) {
+
+		List<UserVO> lst = new UserDAO().listLoggedUsers(idsIn, idsOut);
+		String json = GsonUtil.getGsonWithJavaTime().toJson(lst);
+		return json;
+	}
 
 	@DELETE
 	@Path("deleteCategory")
