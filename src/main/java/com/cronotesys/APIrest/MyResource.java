@@ -160,6 +160,9 @@ public class MyResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String saveTeam(TeamVO teamVO) {
+		for (int i = 0; i < teamVO.getMembers().size(); i++) {
+			System.out.println();
+		}
 		TeamVO team = new TeamDAO().saveOrUpdate(teamVO);
 		String json = GsonUtil.getGsonWithJavaTime().toJson(team);
 		return json;
@@ -211,6 +214,7 @@ public class MyResource {
 		String json = GsonUtil.getGsonWithJavaTime().toJson(lst);
 		return json;
 	}
+
 	@GET
 	@Path("listLoggedUsers")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -292,40 +296,50 @@ public class MyResource {
 		String[] infosA = infos.split(";");
 		return new LoginDAO().changePassword(infosA[0], infosA[1]);
 	}
-	
+
 	@GET
 	@Path("send_email")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public boolean sendEmails(@QueryParam("receivers")EmailVO emailVO) {
-		return new EmailUtil().genericEmail(emailVO);
-	}
-	
-	@GET
-	@Path("TestingTeam")
-	public String enteringTeam(@QueryParam("team")int team) {
-		return "<!DOCTYPE html>\r\n" + 
-				"<html>\r\n" + 
-				"<head>\r\n" + 
-				"	<title>Convite de Time</title>\r\n" + 
-				"</head>\r\n" + 
-				"<body style=\"background-color: #2F3137; padding: 20px ;\">\r\n" + 
-				"	<div style=\"background-color: #35393F; height: 500px; width: 30%; border-radius: 40px;padding: 5px; margin: 0 auto; align-items: center;\">\r\n" + 
-				"		<div style=\"color: white; margin-left: 10px; text-align: justify-all;font-size: 20px\">\r\n" + 
-				"			<img src=\"file:///C:/Users/fdm30/Documents/GitHub/CronoteSys/src/main/resources/image/cronote_logo_white.png\" style=\" width: 70% ;margin: 0 80px\">	<br>\r\n" + 
-				"			<h1 style=\"color: 	#32CD32;\">BEM VINDO AO TIME: (TIME)</h1><br>	\r\n" + 
-				"			Você conseguiu entrar no time, bem vindo!<br>\r\n" + 
-				"			<div style=\"padding: 40px;\">\r\n" + 
-				"				Agora você pode participar dos projetos em time. Aproveite todas as funções que o sistema tem a oferecer!\r\n" + 
-				"			</div>\r\n" + 
-				"		</div>\r\n" + 
-				"	</div>\r\n" + 
-				"</body>\r\n" + 
-				"</html>";
+	@Produces(MediaType.APPLICATION_JSON)
+	public String sendEmails(@QueryParam("receivers") EmailVO emailVO) {
+		if(emailVO.getMessage().contains("team")) {
+			String string = "";
+			String[] receivers = emailVO.getReceiver();
+			for (int i = 0; i < receivers.length; i++) {
+				String[] receiverSplited = receivers[i].split(";");
+				System.out.println(receiverSplited[0]+" "+receiverSplited[1]+" "+receiverSplited[2]);
+				emailVO.setMessage(new MessageUtil().generateMessage("team",receiverSplited[1],receiverSplited[2]));
+				String[] receiver = {receiverSplited[0]};
+				emailVO.setReceiver(receiver);
+				string = GsonUtil.getGsonWithJavaTime().toJson(new EmailUtil().genericEmail(emailVO));
+			}
+			return string;
+		}
+		String string = GsonUtil.getGsonWithJavaTime().toJson(new EmailUtil().genericEmail(emailVO));
+		return string;
 	}
 
+	@GET
 	@Path("countProjectByTeam")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Integer countProjectByTeam(@QueryParam("teamId") long teamId) {
 		return new ProjectDAO().countByTeam(teamId);
 	}
+	
+	@GET
+	@Path("teamEmailAccepted")
+	public String enteringTeam(@QueryParam("team") int team, @QueryParam("user") int user) {
+		return "<!DOCTYPE html>\r\n" + "<html>\r\n" + "<head>\r\n" + "	<title>Convite de Time</title>\r\n"
+				+ "</head>\r\n" + "<body style=\"background-color: #2F3137; padding: 20px ;\">\r\n"
+				+ "	<div style=\"background-color: #35393F; height: 500px; width: 30%; border-radius: 40px;padding: 5px; margin: 0 auto; align-items: center;\">\r\n"
+				+ "		<div style=\"color: white; margin-left: 10px; text-align: justify-all;font-size: 20px\">\r\n"
+				+ "			<img src=\"https://instagram.fcpq2-1.fna.fbcdn.net/vp/e8dc300af2b279a19c6098b9b1e53832/5DE2331B/t51.2885-15/e35/46570500_296239597698930_2847510385969770577_n.jpg?_nc_ht=instagram.fcpq2-1.fna.fbcdn.net\" style=\"  width: 30% ;height:30%;margin: 0 200px;\">	<br>\r\n"
+				+ "			<h1 style=\"color: 	#32CD32;\">BEM VINDO AO TIME: (TIME)</h1><br>	\r\n"
+				+ "			Voc&#234; conseguiu entrar no time, bem vindo!<br>\r\n"
+				+ "			<div style=\"padding: 40px;\">\r\n"
+				+ "				Agora você pode participar dos projetos em time. Aproveite todas as funções que o sistema tem a oferecer!\r\n"
+				+ "			</div>\r\n" + "		</div>\r\n" + "	</div>\r\n" + "</body>\r\n" + "</html>";
+	}
+	
+	
 }

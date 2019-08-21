@@ -1,5 +1,7 @@
 package com.cronotesys.APIrest;
 
+import java.util.concurrent.CompletableFuture;
+
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
@@ -21,15 +23,10 @@ public class EmailUtil {
 			email.setSSLOnConnect(true);
 			email.setFrom(sUser,"Cronote");
 			email.setSubject(emailVO.getSubject());
-			String message = "";
-			if(emailVO.getMessage().contains("team")) {
-				email.setMsg(new MessageUtil().generateMessage("team"));
-			}else {
-				
-			}
-			email.setMsg(emailVO.getMessage());
+			email.setMsg(emailVO.getMessage());		
 			if(emailVO.getReceiver().length == 0) {
-				System.out.println("Erro, não há destinatario.");
+				System.out.println("There's no receiver");
+				return false;
 			}else {
 				String[] receiver = emailVO.getReceiver();
 				for (int i = 0; i < receiver.length; i++) {
@@ -45,10 +42,15 @@ public class EmailUtil {
 	}
 	
 	public void sendEmail(Email email) {
-			try {
-				email.send();
-			} catch (EmailException e) {
-				e.printStackTrace();
-			}
+		CompletableFuture.runAsync(new Runnable() {
+		    @Override
+		    public void run() {
+				try {
+					email.send();
+				} catch (EmailException e) {
+					e.printStackTrace();
+				}
+		    }
+		});
 	}
 }
