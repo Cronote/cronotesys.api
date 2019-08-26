@@ -25,7 +25,6 @@ public class EmailUtil {
 			email.setSubject(emailVO.getSubject());
 			email.setMsg(emailVO.getMessage());		
 			if(emailVO.getReceiver().length == 0) {
-				System.out.println("There's no receiver");
 				return false;
 			}else {
 				String[] receiver = emailVO.getReceiver();

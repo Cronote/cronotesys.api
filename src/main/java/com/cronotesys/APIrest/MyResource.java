@@ -12,12 +12,14 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.cronoteSys.filter.ActivityFilter;
+import com.cronoteSys.model.bo.TeamBO;
 import com.cronoteSys.model.dao.ActivityDAO;
 import com.cronoteSys.model.dao.CategoryDAO;
 import com.cronoteSys.model.dao.ExecutionTimeDAO;
 import com.cronoteSys.model.dao.LoginDAO;
 import com.cronoteSys.model.dao.ProjectDAO;
 import com.cronoteSys.model.dao.TeamDAO;
+import com.cronoteSys.model.dao.TeamUserDAO;
 import com.cronoteSys.model.dao.UserDAO;
 import com.cronoteSys.model.vo.ActivityVO;
 import com.cronoteSys.model.vo.CategoryVO;
@@ -307,8 +309,7 @@ public class MyResource {
 			String[] receivers = emailVO.getReceiver();
 			for (int i = 0; i < receivers.length; i++) {
 				String[] receiverSplited = receivers[i].split(";");
-				System.out.println(receiverSplited[0]+" "+receiverSplited[1]+" "+receiverSplited[2]);
-				emailVO.setMessage(new MessageUtil().generateMessage("team",receiverSplited[1],receiverSplited[2]));
+				emailVO.setMessage(new MessageUtil().generateMessage("team",receiverSplited[1],receiverSplited[2], receiverSplited[3]));
 				String[] receiver = {receiverSplited[0]};
 				emailVO.setReceiver(receiver);
 				string = GsonUtil.getGsonWithJavaTime().toJson(new EmailUtil().genericEmail(emailVO));
@@ -327,19 +328,49 @@ public class MyResource {
 	}
 	
 	@GET
-	@Path("teamEmailAccepted")
-	public String enteringTeam(@QueryParam("team") int team, @QueryParam("user") int user) {
-		return "<!DOCTYPE html>\r\n" + "<html>\r\n" + "<head>\r\n" + "	<title>Convite de Time</title>\r\n"
-				+ "</head>\r\n" + "<body style=\"background-color: #2F3137; padding: 20px ;\">\r\n"
-				+ "	<div style=\"background-color: #35393F; height: 500px; width: 30%; border-radius: 40px;padding: 5px; margin: 0 auto; align-items: center;\">\r\n"
-				+ "		<div style=\"color: white; margin-left: 10px; text-align: justify-all;font-size: 20px\">\r\n"
-				+ "			<img src=\"https://instagram.fcpq2-1.fna.fbcdn.net/vp/e8dc300af2b279a19c6098b9b1e53832/5DE2331B/t51.2885-15/e35/46570500_296239597698930_2847510385969770577_n.jpg?_nc_ht=instagram.fcpq2-1.fna.fbcdn.net\" style=\"  width: 30% ;height:30%;margin: 0 200px;\">	<br>\r\n"
-				+ "			<h1 style=\"color: 	#32CD32;\">BEM VINDO AO TIME: (TIME)</h1><br>	\r\n"
-				+ "			Voc&#234; conseguiu entrar no time, bem vindo!<br>\r\n"
-				+ "			<div style=\"padding: 40px;\">\r\n"
-				+ "				Agora você pode participar dos projetos em time. Aproveite todas as funções que o sistema tem a oferecer!\r\n"
-				+ "			</div>\r\n" + "		</div>\r\n" + "	</div>\r\n" + "</body>\r\n" + "</html>";
-	}
-	
-	
+	@Path("teamAccepted")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String teamAccepted(@QueryParam("member")int member, @QueryParam("team")int team) {
+		boolean bInvitedAccepted = new TeamUserDAO().inviteAccepted(member, team);
+		if(bInvitedAccepted) {
+			String teamName = new TeamBO().getTeamName(member);
+			return "<!DOCTYPE html>\r\n" + 
+					"<html>\r\n" + 
+					"<meta charset=\"utf-8\">\r\n"+
+					"<head>\r\n" + 
+					"	<title>Convite de Time</title>\r\n" + 
+					"</head>\r\n" + 
+					"<body style=\"background-color: #2F3137; padding: 20px ;\">\r\n" + 
+					"	<div style=\"background-color: #35393F; height: 500px; width: 30%; border-radius: 40px;padding: 5px; margin: 0 auto; align-items: center;\">\r\n" + 
+					"		<div style=\"color: white; margin-left: 10px; text-align: justify-all;font-size: 20px\">\r\n" + 
+					"			<img src=\"https://instagram.fcpq2-1.fna.fbcdn.net/vp/e8dc300af2b279a19c6098b9b1e53832/5DE2331B/t51.2885-15/e35/46570500_296239597698930_2847510385969770577_n.jpg?_nc_ht=instagram.fcpq2-1.fna.fbcdn.net\" style=\" width: 30% ;height:30%;margin: 0 200px; \">	<br>\r\n" + 
+					"			<h1 style=\"color: 	#32CD32;\">BEM VINDO AO TIME: "+teamName+"</h1><br>	\r\n" + 
+					"			Você conseguiu entrar no time "+teamName+", bem vindo!<br>\r\n" + 
+					"			<div style=\"padding: 40px;\">\r\n" + 
+					"				Agora você pode participar dos projetos em time. Aproveite todas as funções que o sistema tem a oferecer!\r\n" + 
+					"			</div>\r\n" + 
+					"		</div>\r\n" + 
+					"	</div>\r\n" + 
+					"</body>\r\n" + 
+					"</html>";
+		}else {
+			return "<!DOCTYPE html>\r\n" + 
+					"<html>\r\n" + 
+					"<head>\r\n" + 
+					"	<meta charset=\"utf-8\">\r\n" + 
+					"	<title>Convite de Time</title>\r\n" + 
+					"</head>\r\n" + 
+					"<body style=\"background-color: #2F3137; padding: 20px ;\">\r\n" + 
+					"	<div style=\"background-color: #35393F; height: 500px; width: 30%; border-radius: 40px;padding: 5px; margin: 0 auto; align-items: center;\">\r\n" + 
+					"		<div style=\"color: white; margin-left: 10px; text-align: justify-all;font-size: 20px\">\r\n" + 
+					"			<img src=\"https://instagram.fcpq2-1.fna.fbcdn.net/vp/e8dc300af2b279a19c6098b9b1e53832/5DE2331B/t51.2885-15/e35/46570500_296239597698930_2847510385969770577_n.jpg?_nc_ht=instagram.fcpq2-1.fna.fbcdn.net\" style=\" width: 30% ;height:30%;margin: 0 200px; \">	<br>\r\n" + 
+					"			<h1 style=\"color: 	#CC0000;\">Erro!</h1><br>	\r\n" + 
+					"			Não foi possivel entrar em um time, por favor tente mais tarde<br>\r\n" + 
+					"		</div>\r\n" + 
+					"	</div>\r\n" + 
+					"</body>\r\n" + 
+					"</html>";
+		}
+		
+	}	
 }
