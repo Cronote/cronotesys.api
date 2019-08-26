@@ -333,7 +333,7 @@ public class MyResource {
 	public String teamAccepted(@QueryParam("member")int member, @QueryParam("team")int team) {
 		boolean bInvitedAccepted = new TeamUserDAO().inviteAccepted(member, team);
 		if(bInvitedAccepted) {
-			String teamName = new TeamBO().getTeamName(member);
+			String teamName = new TeamBO().getTeamName(team);
 			return "<!DOCTYPE html>\r\n" + 
 					"<html>\r\n" + 
 					"<meta charset=\"utf-8\">\r\n"+
