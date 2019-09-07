@@ -142,7 +142,10 @@ public class MyResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String listProjectByActivity(@QueryParam("userid") int userId) {
-		List<ProjectVO> lst = new ProjectDAO().getList(userId);
+		UserVO u = new UserDAO().find(userId);
+		List<TeamVO> lstTeams = new TeamDAO().listByUserOwnerOrMember(userId);
+		String teamIds = TeamVO.getIdsAsStringFromList(lstTeams);
+		List<ProjectVO> lst = new ProjectDAO().getList(userId,teamIds);
 		String json = GsonUtil.getGsonWithJavaTime().toJson(lst);
 		return json;
 	}
@@ -308,6 +311,8 @@ public class MyResource {
 			String string = "";
 			String[] receivers = emailVO.getReceiver();
 			for (int i = 0; i < receivers.length; i++) {
+				if(receivers[i] == null)
+					continue;
 				String[] receiverSplited = receivers[i].split(";");
 				emailVO.setMessage(new MessageUtil().generateMessage("team",receiverSplited[1],receiverSplited[2], receiverSplited[3]));
 				String[] receiver = {receiverSplited[0]};
@@ -331,7 +336,7 @@ public class MyResource {
 	@Path("teamAccepted")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String teamAccepted(@QueryParam("member")int member, @QueryParam("team")int team) {
-		boolean bInvitedAccepted = new TeamUserDAO().inviteAccepted(member, team);
+		boolean bInvitedAccepted = new TeamDAO().inviteAccepted2(member, team);
 		if(bInvitedAccepted) {
 			String teamName = new TeamBO().getTeamName(team);
 			return "<!DOCTYPE html>\r\n" + 
