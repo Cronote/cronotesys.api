@@ -4,11 +4,11 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.cronotesys</groupId>
-	<artifactId>APIrest</artifactId>
+	<groupId>com</groupId>
+	<artifactId>cronotesys.api</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1</version>
-	<name>APIrest</name>
+	<name>cronotesys.api</name>
 	<repositories>
 		<repository>
 			<id>jitpack.io</id>
@@ -29,6 +29,13 @@
 	</dependencyManagement>
 
 	<dependencies>
+		<dependency>
+			<groupId>com</groupId>
+			<artifactId>Cronotesys.model</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<!-- retirar para usar local<dependency> <groupId>com.github.Cronote</groupId> 
+			<artifactId>cronotesys.model</artifactId> <version>2be05e1a38</version> </dependency> -->
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet</artifactId>
@@ -55,11 +62,7 @@
 			<version>${jetty.version}</version>
 			<scope>provided</scope>
 		</dependency>
-	<dependency>
-	    <groupId>com.github.Cronote</groupId>
-	    <artifactId>cronotesys.model</artifactId>
-	    <version>1315ccdf3c</version>
-	</dependency>
+
 		<dependency>
 			<groupId>org.glassfish.jersey.test-framework.providers</groupId>
 			<artifactId>jersey-test-framework-provider-bundle</artifactId>
@@ -69,7 +72,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>APIrest</finalName>
+		<finalName>cronotesys.api</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -48,8 +48,7 @@ public class MyResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getIt() {
-//    	ActivityVO atc = new ActivityDAO().find(1);
-		return "Hello, Heroku!" /* + atc.getTitle() */;
+		return "Hello, Heroku!" ;
 	}
 
 	@GET
@@ -240,8 +239,7 @@ public class MyResource {
 	@GET
 	@Path("countByCategory")
 	public String countByCategory(@QueryParam("categoryID") int categoryId) {
-		return GsonUtil.getGsonWithJavaTime().toJson(new UserDAO().find(3));
-//		return new ActivityDAO().countByCategory(categoryId);
+		return new ActivityDAO().countByCategory(categoryId).toString();
 	}
 
 	@GET
