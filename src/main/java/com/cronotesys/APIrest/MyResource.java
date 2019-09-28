@@ -169,9 +169,6 @@ public class MyResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String saveTeam(TeamVO teamVO) {
-		for (int i = 0; i < teamVO.getMembers().size(); i++) {
-			System.out.println();
-		}
 		TeamVO team = new TeamDAO().saveOrUpdate(teamVO);
 		String json = GsonUtil.getGsonWithJavaTime().toJson(team);
 		return json;
@@ -340,6 +337,7 @@ public class MyResource {
 	@Path("teamAccepted")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String teamAccepted(@QueryParam("member") int member, @QueryParam("team") int team) {
+		//TODO: recuperar o team user, verificar expiração e depois aceitar ou n
 		boolean bInvitedAccepted = new TeamDAO().inviteAccepted2(member, team);
 		if (bInvitedAccepted) {
 			String teamName = new TeamBO().getTeamName(team);
