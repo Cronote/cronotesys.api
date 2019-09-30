@@ -8,7 +8,6 @@
 	<artifactId>cronotesys.api</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1</version>
-	<name>cronotesys.api</name>
 	<repositories>
 		<repository>
 			<id>jitpack.io</id>

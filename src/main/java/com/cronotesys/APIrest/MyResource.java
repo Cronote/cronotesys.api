@@ -1,6 +1,5 @@
 package com.cronotesys.APIrest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -20,7 +19,6 @@ import com.cronoteSys.model.dao.ExecutionTimeDAO;
 import com.cronoteSys.model.dao.LoginDAO;
 import com.cronoteSys.model.dao.ProjectDAO;
 import com.cronoteSys.model.dao.TeamDAO;
-import com.cronoteSys.model.dao.TeamUserDAO;
 import com.cronoteSys.model.dao.UserDAO;
 import com.cronoteSys.model.vo.ActivityVO;
 import com.cronoteSys.model.vo.CategoryVO;
@@ -30,7 +28,6 @@ import com.cronoteSys.model.vo.LoginVO;
 import com.cronoteSys.model.vo.ProjectVO;
 import com.cronoteSys.model.vo.TeamVO;
 import com.cronoteSys.model.vo.UserVO;
-import com.cronoteSys.model.vo.view.SimpleUser;
 import com.cronoteSys.util.GsonUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -337,7 +334,6 @@ public class MyResource {
 	@Path("teamAccepted")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String teamAccepted(@QueryParam("member") int member, @QueryParam("team") int team) {
-		//TODO: recuperar o team user, verificar expiração e depois aceitar ou n
 		boolean bInvitedAccepted = new TeamDAO().inviteAccepted2(member, team);
 		if (bInvitedAccepted) {
 			String teamName = new TeamBO().getTeamName(team);
