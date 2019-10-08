@@ -8,7 +8,6 @@
 	<artifactId>cronotesys.api</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1</version>
-	<name>cronotesys.api</name>
 	<repositories>
 		<repository>
 			<id>jitpack.io</id>
@@ -29,13 +28,13 @@
 	</dependencyManagement>
 
 	<dependencies>
-		<!-- retirar para usar local<dependency> <groupId>com</groupId> <artifactId>Cronotesys.model</artifactId> 
-			<version>0.0.1</version> </dependency> -->
 		<dependency>
-			<groupId>com.github.Cronote</groupId>
-			<artifactId>cronotesys.model</artifactId>
-			<version>2be05e1a38</version>
+			<groupId>com</groupId>
+			<artifactId>Cronotesys.model</artifactId>
+			<version>0.0.1</version>
 		</dependency>
+		<!-- retirar para usar local<dependency> <groupId>com.github.Cronote</groupId> 
+			<artifactId>cronotesys.model</artifactId> <version>2be05e1a38</version> </dependency> -->
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet</artifactId>
