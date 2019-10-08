@@ -190,6 +190,17 @@ public class MyResource {
 	}
 
 	@GET
+	@Path("getListTeamsBySearchWithUser")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String listTeamsBySearchWithUser(@QueryParam("userId") int userId, @QueryParam("search") String search)
+			throws JsonProcessingException {
+		List<TeamVO> lst = new TeamDAO().searchWithUserOwnerOrMember(search, userId);
+		String json = GsonUtil.getGsonWithJavaTime().toJson(lst);
+		return json;
+	}
+
+	@GET
 	@Path("test")
 	public String testUser() {
 		List<UserVO> lst = new UserDAO().listAll();
