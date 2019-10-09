@@ -28,18 +28,14 @@
 	</dependencyManagement>
 
 	<dependencies>
-	<!-- 
-		<dependency>
-			<groupId>com</groupId>
-			<artifactId>Cronotesys.model</artifactId>
-			<version>0.0.1</version>
-		</dependency> -->
-		<!-- retirar para usar local -->
+
 		<dependency>
 			<groupId>com.github.Cronote</groupId>
 			<artifactId>cronotesys.model</artifactId>
-			<version>jitpack_v.0.0.2</version>
+			<version>jitpack_v.0.0.5</version>
 		</dependency>
+		<!-- <dependency> <groupId>com</groupId> <artifactId>Cronotesys.model</artifactId> 
+			<version>0.0.2</version> </dependency> -->
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet</artifactId>
