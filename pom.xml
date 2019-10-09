@@ -38,7 +38,7 @@
 		<dependency>
 			<groupId>com.github.Cronote</groupId>
 			<artifactId>cronotesys.model</artifactId>
-			<version>jitpack_v.0.0.1</version>
+			<version>jitpack_v.0.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>

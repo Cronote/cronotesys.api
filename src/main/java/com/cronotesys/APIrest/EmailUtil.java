@@ -2,8 +2,9 @@ package com.cronotesys.APIrest;
 
 import java.util.concurrent.CompletableFuture;
 
+import javax.validation.constraints.Email;
+
 import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 
@@ -16,7 +17,7 @@ public class EmailUtil {
 	private final String sHostName = "smtp.googlemail.com";
 	public boolean genericEmail(EmailVO emailVO) {
 		try {
-			Email email = new SimpleEmail();
+			SimpleEmail email = new SimpleEmail();
 			email.setHostName(sHostName);
 			email.setSmtpPort(iSmtpPort);
 			email.setAuthenticator(new DefaultAuthenticator(sUser, sPass));
@@ -40,7 +41,7 @@ public class EmailUtil {
 		return false;		
 	}
 	
-	public void sendEmail(Email email) {
+	public void sendEmail(SimpleEmail email) {
 		CompletableFuture.runAsync(new Runnable() {
 		    @Override
 		    public void run() {
