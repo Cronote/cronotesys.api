@@ -1,5 +1,6 @@
 package com.cronotesys.APIrest;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -9,7 +10,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.sse.OutboundSseEvent;
+import javax.ws.rs.sse.Sse;
+import javax.ws.rs.sse.SseEventSink;
 
 import com.cronoteSys.filter.ActivityFilter;
 import com.cronoteSys.model.bo.TeamBO;
@@ -322,8 +327,11 @@ public class MyResource {
 				if (receivers[i] == null)
 					continue;
 				String[] receiverSplited = receivers[i].split(";");
-				emailVO.setMessage(new MessageUtil().generateMessage("team", receiverSplited[1], receiverSplited[2],
-						receiverSplited[3]));
+				HashMap<String, String> emailValues = new HashMap<String, String>();
+				emailValues.put("teamName", receiverSplited[3]);
+				emailValues.put("team", receiverSplited[2]);
+				emailValues.put("member", receiverSplited[1]);
+				emailVO.setMessage(new MessageUtil().generateMessage("team", emailValues));
 				String[] receiver = { receiverSplited[0] };
 				emailVO.setReceiver(receiver);
 				string = GsonUtil.getGsonWithJavaTime().toJson(new EmailUtil().genericEmail(emailVO));
@@ -372,4 +380,5 @@ public class MyResource {
 		}
 
 	}
+
 }
