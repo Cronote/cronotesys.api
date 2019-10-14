@@ -276,6 +276,16 @@ public class MyResource {
 
 	}
 
+	@GET
+	@Path("listCategoryByUsers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listCategoryByUsers(@QueryParam("search") String search, @QueryParam("users") String users) {
+		List<CategoryVO> lst = new CategoryDAO().listByDescriptionAndUser(search, users);
+		String json = GsonUtil.getGsonWithJavaTime().toJson(lst);
+		return json;
+
+	}
+
 	@POST
 	@Path("saveExecutionTime")
 	@Produces(MediaType.APPLICATION_JSON)
