@@ -29,13 +29,16 @@
 
 	<dependencies>
 
-		<dependency>
-			<groupId>com.github.Cronote</groupId>
-			<artifactId>cronotesys.model</artifactId>
-			<version>jitpack_v.0.0.13</version>
+		 <dependency> 
+		 	<groupId>com.github.Cronote</groupId> 
+		 	<artifactId>cronotesys.model</artifactId> 
+			<version>jitpack_v.0.0.14</version> 
 		</dependency>
-		<!-- <dependency> <groupId>com</groupId> <artifactId>Cronotesys.model</artifactId> 
-			<version>0.0.2</version> </dependency> -->
+		<!--  <dependency>
+			<groupId>com</groupId>
+			<artifactId>Cronotesys.model</artifactId>
+			<version>0.0.2</version>
+		</dependency>-->
 		<dependency>
 			<groupId>org.glassfish.jersey.containers</groupId>
 			<artifactId>jersey-container-servlet</artifactId>
